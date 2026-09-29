@@ -1,0 +1,36 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: neuroplan
+
+resources:
+  - ../../base
+  - 20-routes.yaml
+
+patches:
+  - path: 30-backend-config-patch.yaml
+
+  # ROSA는 AWS ECR credential provider + Worker IAM Role로 이미지를 Pull합니다.
+  # 1차 Harbor용 imagePullSecret은 base에서 제거합니다.
+  - target:
+      kind: Deployment
+      name: neuroplan-frontend
+    patch: |-
+      - op: remove
+        path: /spec/template/spec/imagePullSecrets
+
+  - target:
+      kind: Deployment
+      name: neuroplan-backend
+    patch: |-
+      - op: remove
+        path: /spec/template/spec/imagePullSecrets
+
+images:
+  - name: harbor.nplan.local:80/neuroplan/frontend
+    newName: 707191185613.dkr.ecr.ap-northeast-2.amazonaws.com/neuroplan-frontend
+    newTag: "db4a0fb"
+
+  - name: harbor.nplan.local:80/neuroplan/backend
+    newName: 707191185613.dkr.ecr.ap-northeast-2.amazonaws.com/neuroplan-backend
+    newTag: "4dd7cc3"

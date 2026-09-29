@@ -1,0 +1,34 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: application
+
+resources:
+  - ../../base
+  - 20-httproute.yaml
+
+patches:
+  - target:
+      kind: Deployment
+      name: neuroplan-frontend
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/imagePullSecrets/0/name
+        value: ecr-pull-secret
+
+  - target:
+      kind: Deployment
+      name: neuroplan-backend
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/imagePullSecrets/0/name
+        value: ecr-pull-secret
+
+images:
+  - name: harbor.nplan.local:80/neuroplan/frontend
+    newName: 707191185613.dkr.ecr.ap-northeast-2.amazonaws.com/neuroplan-frontend
+    newTag: "db4a0fb"
+
+  - name: harbor.nplan.local:80/neuroplan/backend
+    newName: 707191185613.dkr.ecr.ap-northeast-2.amazonaws.com/neuroplan-backend
+    newTag: "4dd7cc3"
