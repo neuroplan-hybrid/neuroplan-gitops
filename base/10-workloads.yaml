@@ -12,6 +12,8 @@ data:
   JWT_REFRESH_TTL: 7d
   JWT_REAUTH_TTL: 5m
   AUTH_COOKIE_SECURE: "true"
+  # 기본값은 On-Prem. ROSA overlay에서 rosa로 명시적으로 덮어씁니다.
+  DEPLOYMENT_SITE: onprem
   # MVP 관리자 계정. 운영 전 팀 승인 이메일로 교체합니다(여러 개는 쉼표로 구분).
   ADMIN_EMAILS: admin@nplan.local
   LLM_ENABLED: "true"
@@ -36,6 +38,11 @@ metadata:
     app.kubernetes.io/part-of: neuroplan-login-mvp
 spec:
   replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: neuroplan-frontend
@@ -48,6 +55,13 @@ spec:
       imagePullSecrets:
         - name: harbor-pull-secret
       automountServiceAccountToken: false
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: neuroplan-frontend
       securityContext:
         runAsNonRoot: true
         seccompProfile:
@@ -134,6 +148,15 @@ spec:
       imagePullSecrets:
         - name: harbor-pull-secret
       automountServiceAccountToken: false
+      # preStop 15초 + Spring graceful shutdown 최대 20초를 모두 수용합니다.
+      terminationGracePeriodSeconds: 45
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: neuroplan-backend
       securityContext:
         runAsNonRoot: true
         seccompProfile:
@@ -152,6 +175,10 @@ spec:
           ports:
             - name: http
               containerPort: 8080
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sh", "-c", "sleep 15"]
           startupProbe:
             httpGet:
               path: /actuator/health/liveness
