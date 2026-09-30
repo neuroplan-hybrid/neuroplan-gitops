@@ -33,4 +33,4 @@ images:
 
   - name: harbor.nplan.local:80/neuroplan/backend
     newName: 707191185613.dkr.ecr.ap-northeast-2.amazonaws.com/neuroplan-backend
-    newTag: "6d47759"
+    newTag: "59a2d69"
