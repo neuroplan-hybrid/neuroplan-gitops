@@ -5,3 +5,4 @@ metadata:
   name: neuroplan-backend-config
 data:
   DB_URL: jdbc:mariadb://REPLACE_ROSA_DB_HOST:3306/infraready
+  DEPLOYMENT_SITE: rosa

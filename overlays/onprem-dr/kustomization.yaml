@@ -8,6 +8,8 @@ resources:
   - 20-httproute.yaml
 
 patches:
+  - path: 30-backend-config-patch.yaml
+
   - target:
       kind: Deployment
       name: neuroplan-frontend
