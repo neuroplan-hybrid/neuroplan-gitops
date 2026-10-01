@@ -8,6 +8,16 @@ resources:
   - 10-vault-rds-dynamic-secret.yaml
 
 patches:
+  # rosa-vault Overlay는 반드시 RDS를 사용합니다.
+  # 실제 RDS 생성 후 REPLACE_ROSA_RDS_HOST를 운영 Endpoint로 교체한 뒤 활성화합니다.
+  - target:
+      kind: ConfigMap
+      name: neuroplan-backend-config
+    patch: |-
+      - op: replace
+        path: /data/DB_URL
+        value: jdbc:mariadb://REPLACE_ROSA_RDS_HOST:3306/infraready
+
   # ROSA Backend의 DB 자격증명은 Vault/VSO가 생성한
   # neuroplan-rds-dynamic Secret만 사용합니다.
   # On-Prem DR의 기존 DB Secret 구성에는 영향을 주지 않습니다.
