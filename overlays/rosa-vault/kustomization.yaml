@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: neuroplan
+
+resources:
+  - ../rosa
+  - 10-vault-rds-dynamic-secret.yaml
+
+patches:
+  # Vault/VSO가 생성하는 동적 RDS 계정을 ROSA Backend에만 주입합니다.
+  # 기존 onprem-dr overlay는 변경하지 않습니다.
+  - target:
+      kind: Deployment
+      name: neuroplan-backend
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/envFrom/-
+        value:
+          secretRef:
+            name: neuroplan-rds-dynamic
