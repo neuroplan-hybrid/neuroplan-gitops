@@ -8,14 +8,23 @@ resources:
   - 10-vault-rds-dynamic-secret.yaml
 
 patches:
-  # Vault/VSO가 생성하는 동적 RDS 계정을 ROSA Backend에만 주입합니다.
-  # 기존 onprem-dr overlay는 변경하지 않습니다.
+  # ROSA Backend의 DB 자격증명은 Vault/VSO가 생성한
+  # neuroplan-rds-dynamic Secret만 사용합니다.
+  # On-Prem DR의 기존 DB Secret 구성에는 영향을 주지 않습니다.
   - target:
       kind: Deployment
       name: neuroplan-backend
     patch: |-
       - op: add
-        path: /spec/template/spec/containers/0/envFrom/-
+        path: /spec/template/spec/containers/0/env
         value:
-          secretRef:
-            name: neuroplan-rds-dynamic
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: neuroplan-rds-dynamic
+                key: DB_USERNAME
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: neuroplan-rds-dynamic
+                key: DB_PASSWORD
