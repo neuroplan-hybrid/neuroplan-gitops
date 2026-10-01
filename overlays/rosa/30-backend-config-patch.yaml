@@ -1,8 +1,8 @@
-# ROSA 배포 전 실제 연결 가능한 DB/MaxScale 주소로 교체합니다.
+# 초기 하이브리드 단계에서는 base의 On-Prem MaxScale DB_URL을 상속한다.
+# Cutover 후 별도 승인 PR에서 운영 RDS Endpoint:3306으로 전환한다.
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: neuroplan-backend-config
 data:
-  DB_URL: jdbc:mariadb://REPLACE_ROSA_DB_HOST:3306/infraready
   DEPLOYMENT_SITE: rosa
