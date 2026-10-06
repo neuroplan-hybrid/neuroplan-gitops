@@ -5,6 +5,7 @@ namespace: neuroplan
 
 resources:
   - ../../base
+  - 15-health-service.yaml
   - 20-routes.yaml
 
 patches:

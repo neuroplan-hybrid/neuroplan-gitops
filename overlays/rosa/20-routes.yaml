@@ -1,4 +1,6 @@
-# ROSA 배포 전 app.example.com을 실제 Route 도메인으로 교체합니다.
+# neuroplan.cloud 도메인 확정 기준 ROSA 애플리케이션 Route입니다.
+# 사용자 인증서 연결 방식은 실제 ROSA/OpenShift 버전 확인 후 별도 반영합니다.
+# 인증서/개인 키 자체는 Git에 저장하지 않습니다.
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
@@ -6,7 +8,7 @@ metadata:
   labels:
     app.kubernetes.io/part-of: neuroplan-login-mvp
 spec:
-  host: app.example.com
+  host: app.neuroplan.cloud
   path: /api
   to:
     kind: Service
@@ -25,11 +27,31 @@ metadata:
   labels:
     app.kubernetes.io/part-of: neuroplan-login-mvp
 spec:
-  host: app.example.com
+  host: app.neuroplan.cloud
   path: /
   to:
     kind: Service
     name: neuroplan-frontend
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: neuroplan-primary-health
+  labels:
+    app.kubernetes.io/part-of: neuroplan-login-mvp
+    neuroplan.io/purpose: route53-health
+spec:
+  host: primary-health.neuroplan.cloud
+  path: /actuator/health/routing
+  to:
+    kind: Service
+    name: neuroplan-backend-health
   port:
     targetPort: http
   tls:
