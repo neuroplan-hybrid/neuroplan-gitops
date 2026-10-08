@@ -6,3 +6,4 @@ metadata:
   name: neuroplan-backend-config
 data:
   DEPLOYMENT_SITE: rosa
+  DEMO_WRITE_FENCE: "false"
