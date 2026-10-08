@@ -86,5 +86,5 @@ curl -i https://primary-health.neuroplan.cloud/actuator/health/routing
 - RDS Cutover 시에는 RDS 전용 정적 DB 계정을 Kubernetes Secret으로 제공합니다.
 - DB_URL은 실제 RDS Endpoint 확인 후 별도 RDS Overlay에서 변경합니다.
 - Vault Server, VSO 및 동적 DB 계정은 이번 구축·시연 범위에서 제외합니다.
-- 기존 `bootstrap/rosa-vault`, `overlays/rosa-vault` 코드는 미사용 PoC 자료로 보존하며 배포하지 않습니다.
+- 기존 Vault 전용 GitOps 코드는 별도 PR에서 제거하며, 필요한 경우 Git 이력을 통해 확인할 수 있습니다. Vault Server 및 VSO는 배포하지 않습니다.
 - DB 계정과 비밀번호는 Git에 저장하지 않습니다.
