@@ -16,8 +16,7 @@
 | 우선순위 | 구성요소 | 설치/관리 방식 | 비고 |
 |---|---|---|---|
 | P0 | Red Hat OpenShift GitOps Operator | ROSA 생성 후 클러스터에 설치 | Argo CD 및 GitOps 첫 배포 선행조건. 실제 ROSA 버전과 호환되는 채널/버전은 10/12에 확인 후 기록 |
-| P1 | HashiCorp Vault Server | `bootstrap/rosa-vault`의 Argo CD Helm Application | P0 RDS 전환/DR 검증을 막지 않는 별도 PoC |
-| P1 | HashiCorp Vault Secrets Operator | `bootstrap/rosa-vault`의 Argo CD Helm Application | 현재 저장소 기준 chart `1.6.0`; Cutover 후 ROSA Backend → RDS 동적 자격증명 경로에서 사용 |
+| P0 | RDS 애플리케이션 DB 인증 | Kubernetes Secret 기반 정적 DB 계정 | Cutover 전 RDS 전용 계정 생성 및 Secret 준비. 비밀번호는 Git에 저장하지 않음 |
 
 추가 Ingress/Gateway Operator는 P0에 넣지 않습니다. ROSA 애플리케이션 진입은 기본 OpenShift Route/IngressController를 사용합니다.
 
@@ -81,11 +80,11 @@ curl -i https://primary-health.neuroplan.cloud/actuator/health/routing
 
 정상 기대값은 HTTP 200입니다.
 
-## P1 Vault 경로
+## RDS 전환 및 Vault 제외 결정
 
-Vault는 P0 첫 배포와 분리합니다.
-
-- Bootstrap: `bootstrap/rosa-vault`
-- 애플리케이션 Overlay: `overlays/rosa-vault`
-- 목표: Cutover 후 ROSA Backend → RDS 운영 경로에 동적 DB 자격증명 적용
-- P0 RDS 전환 및 DR 검증이 우선이며, Vault/VSO 문제로 P0 일정이 차단되면 안 됨
+- 10/12 최초 ROSA 배포는 기존 On-Prem MaxScale DB 연결을 유지합니다.
+- RDS Cutover 시에는 RDS 전용 정적 DB 계정을 Kubernetes Secret으로 제공합니다.
+- DB_URL은 실제 RDS Endpoint 확인 후 별도 RDS Overlay에서 변경합니다.
+- Vault Server, VSO 및 동적 DB 계정은 이번 구축·시연 범위에서 제외합니다.
+- 기존 `bootstrap/rosa-vault`, `overlays/rosa-vault` 코드는 미사용 PoC 자료로 보존하며 배포하지 않습니다.
+- DB 계정과 비밀번호는 Git에 저장하지 않습니다.
