@@ -17,6 +17,10 @@ patches:
       - op: replace
         path: /spec/template/spec/imagePullSecrets/0/name
         value: ecr-pull-secret
+      # 커밋 SHA 고정 태그 → 캐시 재사용, 만료 토큰으로 인한 불필요한 재Pull 방지 (#33 A+B)
+      - op: replace
+        path: /spec/template/spec/containers/0/imagePullPolicy
+        value: IfNotPresent
 
   - target:
       kind: Deployment
@@ -25,6 +29,10 @@ patches:
       - op: replace
         path: /spec/template/spec/imagePullSecrets/0/name
         value: ecr-pull-secret
+      # 커밋 SHA 고정 태그 → 캐시 재사용, 만료 토큰으로 인한 불필요한 재Pull 방지 (#33 A+B)
+      - op: replace
+        path: /spec/template/spec/containers/0/imagePullPolicy
+        value: IfNotPresent
 
 images:
   - name: harbor.nplan.local:80/neuroplan/frontend
