@@ -8,8 +8,11 @@ spec:
   parentRefs:
     - name: neuroplan-gateway
       sectionName: https
+    - name: neuroplan-gateway
+      sectionName: https-public-app
   hostnames:
     - app.nplan.local
+    - app.neuroplan.cloud
   rules:
     - matches:
         - path:
