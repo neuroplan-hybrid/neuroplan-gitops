@@ -31,7 +31,7 @@ patches:
 images:
   - name: harbor.nplan.local:80/neuroplan/frontend
     newName: 707191185613.dkr.ecr.ap-northeast-2.amazonaws.com/neuroplan-frontend
-    newTag: "bcc6857"
+    newTag: "48d7e15"
 
   - name: harbor.nplan.local:80/neuroplan/backend
     newName: 707191185613.dkr.ecr.ap-northeast-2.amazonaws.com/neuroplan-backend
