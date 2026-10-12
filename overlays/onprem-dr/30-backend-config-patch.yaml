@@ -4,3 +4,5 @@ metadata:
   name: neuroplan-backend-config
 data:
   DEPLOYMENT_SITE: onprem
+  # #93 Writer Cutover 준비: 승인된 동결 시점에만 적용한다.
+  DEMO_WRITE_FENCE: "true"
