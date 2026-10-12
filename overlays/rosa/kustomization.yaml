@@ -28,6 +28,11 @@ patches:
       - op: remove
         path: /spec/template/spec/imagePullSecrets
 
+  # #93: Writer 전환 + RDS 앱 계정 검증 완료 후 승인하여 적용할 두 번째 단계.
+  # 설정 변경에 맞춰 ROSA Backend Pod를 롤아웃하며 Fence는 유지한다.
+  - path: 32-backend-rds-url-patch.yaml
+  - path: 33-backend-rds-rollout.yaml
+
 images:
   - name: harbor.nplan.local:80/neuroplan/frontend
     newName: 707191185613.dkr.ecr.ap-northeast-2.amazonaws.com/neuroplan-frontend
