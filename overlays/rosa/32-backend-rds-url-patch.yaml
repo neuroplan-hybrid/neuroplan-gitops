@@ -1,13 +1,18 @@
 # #93 / CUTOVER STAGE 2 (DRAFT ONLY).
-# 전제: On-Prem + ROSA 쓰기 차단 완료, RDS Writer 승격 완료,
-# RDS 앱 계정/CRUD 권한/인증 검증 완료. DNS(Route 53)는 계속 OFF.
-# 주의: TLS 모드(현재 MaxScale 설정을 계승한 sslMode=disable)는
-# DB/플랫폼 담당이 RDS 연결 정책을 검토·승인한 뒤에만 Merge한다.
+# Preconditions: both backends fenced, RDS promoted to Writer, RDS app CRUD
+# credentials validated. Route 53 stays OFF until separately approved.
+# MariaDB Connector/J 3.5.7: verify-full validates both the CA chain and
+# the RDS endpoint hostname. The public RDS CA bundle must be mounted from
+# neuroplan-rds-ca ConfigMap BEFORE this PR is merged (see RDS-TLS-PREFLIGHT.md).
+# A failed CA mount or failed TLS validation must block rollout, not fall
+# back to an unverified connection.
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: neuroplan-backend-config
 data:
-  DB_URL: jdbc:mariadb://neuroplan-rds-operation.cp0uso08u0oq.ap-northeast-2.rds.amazonaws.com:3306/infraready?sslMode=disable
-  # 다른 경로로 이 PR만 먼저 Merge되더라도 Backend 신규 쓰기를 차단한다.
+  DB_URL: "jdbc:mariadb://neuroplan-rds-operation.cp0uso08u0oq.ap-northeast-2.rds.amazonaws.com:3306/infraready?sslMode=verify-full&serverSslCert=/etc/neuroplan/rds-ca/ca-bundle.pem"
+  # Prevent an early merge from opening writes. IMPORTANT: this later patch
+  # overrides 30-backend-config-patch.yaml; any later fence-release PR must
+  # change this key too (or remove it), followed by an approved rollout.
   DEMO_WRITE_FENCE: "true"
