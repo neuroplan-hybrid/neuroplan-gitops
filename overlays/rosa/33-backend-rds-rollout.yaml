@@ -1,0 +1,12 @@
+# #93: RDS DB_URL과 인증정보를 읽도록 ROSA Backend PodTemplate 변경.
+# Secret 자체는 Git에 저장하지 않는다. 기존 JWT Secret 값은 유지한다.
+# 이 annotation과 ConfigMap 변경은 승인된 전환 시점에만 적용한다.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: neuroplan-backend
+spec:
+  template:
+    metadata:
+      annotations:
+        neuroplan.io/rds-url-rollout: "cutover-20261012"
