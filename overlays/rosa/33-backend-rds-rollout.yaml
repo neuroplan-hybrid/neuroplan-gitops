@@ -1,6 +1,8 @@
-# #93: RDS DB_URL과 인증정보를 읽도록 ROSA Backend PodTemplate 변경.
-# Secret 자체는 Git에 저장하지 않는다. 기존 JWT Secret 값은 유지한다.
-# 이 annotation과 ConfigMap 변경은 승인된 전환 시점에만 적용한다.
+# #93: Changes Backend PodTemplate to reload RDS DB_URL and credentials.
+# Public RDS CA trust bundle is provisioned separately (not a secret).
+# If neuroplan-rds-ca is missing, the Pod must fail closed instead of
+# accepting an unverified TLS connection. Never merge without preflight.
+# Preserve JWT and Gemini Secret values. Apply only at approved Cutover.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -10,3 +12,18 @@ spec:
     metadata:
       annotations:
         neuroplan.io/rds-url-rollout: "cutover-20261012"
+    spec:
+      volumes:
+        - name: rds-ca
+          configMap:
+            name: neuroplan-rds-ca
+            optional: false
+            items:
+              - key: ca-bundle.pem
+                path: ca-bundle.pem
+      containers:
+        - name: backend
+          volumeMounts:
+            - name: rds-ca
+              mountPath: /etc/neuroplan/rds-ca
+              readOnly: true
