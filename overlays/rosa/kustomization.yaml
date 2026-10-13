@@ -28,6 +28,15 @@ patches:
       - op: remove
         path: /spec/template/spec/imagePullSecrets
 
+# #93 RDS TLS preflight — CA bundle only. No DB_URL, Secret, or Deployment changes.
+# Keep name fixed: PR #14 mounts ConfigMap "neuroplan-rds-ca" literally.
+configMapGenerator:
+  - name: neuroplan-rds-ca
+    files:
+      - ca-bundle.pem=certs/ap-northeast-2-bundle.pem
+    options:
+      disableNameSuffixHash: true
+
 images:
   - name: harbor.nplan.local:80/neuroplan/frontend
     newName: 707191185613.dkr.ecr.ap-northeast-2.amazonaws.com/neuroplan-frontend
