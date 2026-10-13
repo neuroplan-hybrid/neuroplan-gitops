@@ -1,0 +1,12 @@
+# #93: 승인된 Cutover 사전 동결 단계에서 Backend Pod를 모두 교체한다.
+# ConfigMap만 변경하면 기존 컨테이너의 환경변수는 바뀌지 않는다.
+# 롤아웃이 끝나도 별도의 DB 무쓰기 검증 전에는 Cutover 금지.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: neuroplan-backend
+spec:
+  template:
+    metadata:
+      annotations:
+        neuroplan.io/write-fence-rollout: "cutover-20261012"
