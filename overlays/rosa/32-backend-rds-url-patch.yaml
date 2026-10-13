@@ -1,6 +1,7 @@
-# #93 / CUTOVER STAGE 2 (DRAFT ONLY).
-# Preconditions: both backends fenced, RDS promoted to Writer, RDS app CRUD
-# credentials validated. Route 53 stays OFF until separately approved.
+# #93 / CUTOVER STAGE 3 (ROSA-ONLY WRITE RESUME).
+# Preconditions: RDS Writer and ir_app validated, RDS direct replication to
+# both on-prem DB replicas healthy, and DB owner GO for ROSA-only write resume.
+# On-Prem Backend stays fenced. Route 53 stays OFF until separately approved.
 # MariaDB Connector/J 3.5.7: verify-full validates both the CA chain and
 # the RDS endpoint hostname. The public RDS CA bundle must be mounted from
 # neuroplan-rds-ca ConfigMap BEFORE this PR is merged (see RDS-TLS-PREFLIGHT.md).
@@ -12,7 +13,6 @@ metadata:
   name: neuroplan-backend-config
 data:
   DB_URL: "jdbc:mariadb://neuroplan-rds-operation.cp0uso08u0oq.ap-northeast-2.rds.amazonaws.com:3306/infraready?sslMode=verify-full&serverSslCert=/etc/neuroplan/rds-ca/ca-bundle.pem"
-  # Prevent an early merge from opening writes. IMPORTANT: this later patch
-  # overrides 30-backend-config-patch.yaml; any later fence-release PR must
-  # change this key too (or remove it), followed by an approved rollout.
-  DEMO_WRITE_FENCE: "true"
+  # Later Kustomize patch overrides 30-backend-config-patch.yaml;
+  # both ROSA patches must explicitly agree on write-resume state.
+  DEMO_WRITE_FENCE: "false"
