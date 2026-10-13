@@ -1,0 +1,29 @@
+# #93: Changes Backend PodTemplate to reload RDS DB_URL and credentials.
+# Public RDS CA trust bundle is provisioned separately (not a secret).
+# If neuroplan-rds-ca is missing, the Pod must fail closed instead of
+# accepting an unverified TLS connection. Never merge without preflight.
+# Preserve JWT and Gemini Secret values. Apply only at approved Cutover.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: neuroplan-backend
+spec:
+  template:
+    metadata:
+      annotations:
+        neuroplan.io/rds-url-rollout: "cutover-20261012"
+    spec:
+      volumes:
+        - name: rds-ca
+          configMap:
+            name: neuroplan-rds-ca
+            optional: false
+            items:
+              - key: ca-bundle.pem
+                path: ca-bundle.pem
+      containers:
+        - name: backend
+          volumeMounts:
+            - name: rds-ca
+              mountPath: /etc/neuroplan/rds-ca
+              readOnly: true

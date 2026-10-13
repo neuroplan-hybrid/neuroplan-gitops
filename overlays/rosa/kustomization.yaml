@@ -30,6 +30,10 @@ patches:
       - op: remove
         path: /spec/template/spec/imagePullSecrets
 
+  # #93: Writer 전환용 RDS DB_URL 및 Backend 롤아웃. 적용은 별도 Cutover 승인 후.
+  - path: 32-backend-rds-url-patch.yaml
+  - path: 33-backend-rds-rollout.yaml
+
 # #93 RDS TLS preflight — CA bundle only. No DB_URL, Secret, or Deployment changes.
 # Keep name fixed: PR #14 mounts ConfigMap "neuroplan-rds-ca" literally.
 configMapGenerator:
