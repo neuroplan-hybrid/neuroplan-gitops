@@ -11,6 +11,8 @@ resources:
 
 patches:
   - path: 30-backend-config-patch.yaml
+  # #93: Fence ConfigMap 변경과 동시에 Backend PodTemplate을 바꿔 롤아웃을 유도한다.
+  - path: 31-cutover-write-fence-rollout.yaml
 
   # ROSA는 AWS ECR credential provider + Worker IAM Role로 이미지를 Pull합니다.
   # 1차 Harbor용 imagePullSecret은 base에서 제거합니다.
@@ -28,10 +30,18 @@ patches:
       - op: remove
         path: /spec/template/spec/imagePullSecrets
 
-  # #93: Writer 전환 + RDS 앱 계정 검증 완료 후 승인하여 적용할 두 번째 단계.
-  # 설정 변경에 맞춰 ROSA Backend Pod를 롤아웃하며 Fence는 유지한다.
+  # #93: Writer 전환용 RDS DB_URL 및 Backend 롤아웃. 적용은 별도 Cutover 승인 후.
   - path: 32-backend-rds-url-patch.yaml
   - path: 33-backend-rds-rollout.yaml
+
+# #93 RDS TLS preflight — CA bundle only. No DB_URL, Secret, or Deployment changes.
+# Keep name fixed: PR #14 mounts ConfigMap "neuroplan-rds-ca" literally.
+configMapGenerator:
+  - name: neuroplan-rds-ca
+    files:
+      - ca-bundle.pem=certs/ap-northeast-2-bundle.pem
+    options:
+      disableNameSuffixHash: true
 
 images:
   - name: harbor.nplan.local:80/neuroplan/frontend

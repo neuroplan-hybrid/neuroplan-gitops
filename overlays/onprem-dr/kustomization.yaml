@@ -9,6 +9,8 @@ resources:
 
 patches:
   - path: 30-backend-config-patch.yaml
+  # #93: Fence ConfigMap 변경과 동시에 Backend PodTemplate을 바꿔 롤아웃을 유도한다.
+  - path: 31-cutover-write-fence-rollout.yaml
 
   - target:
       kind: Deployment
