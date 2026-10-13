@@ -1,9 +1,9 @@
-# 초기 하이브리드 단계에서는 base의 On-Prem MaxScale DB_URL을 상속한다.
-# Cutover 후 별도 승인 PR에서 운영 RDS Endpoint:3306으로 전환한다.
+# #93 ROSA-only write resume after RDS Writer cutover and DB owner GO.
+# On-Prem Backend remains fenced in overlays/onprem-dr; Route 53 remains OFF.
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: neuroplan-backend-config
 data:
   DEPLOYMENT_SITE: rosa
-  DEMO_WRITE_FENCE: "true"
+  DEMO_WRITE_FENCE: "false"

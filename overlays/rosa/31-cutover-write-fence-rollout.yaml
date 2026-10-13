@@ -9,4 +9,4 @@ spec:
   template:
     metadata:
       annotations:
-        neuroplan.io/write-fence-rollout: "cutover-20261012"
+        neuroplan.io/write-fence-rollout: "rosa-unfence-20261013"
