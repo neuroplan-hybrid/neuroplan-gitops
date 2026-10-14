@@ -5,6 +5,8 @@ The ROSA overlay adds one ServiceMonitor in neuroplan. It selects the existing n
 
 No Deployment, Service, DB URL, JWT Secret, write fence, CA, Route, image tag, Thanos reader RBAC, UWM ConfigMap, or onprem-dr resource is changed. This uses the already-enabled ROSA User Workload Monitoring stack; no new Prometheus or Grafana server is installed.
 
+The Route 53 health-only Service shares the Backend name label. The monitor therefore excludes Services carrying neuroplan.io/purpose (the health Service has route53-health), preventing duplicate scraping of the same Backend Pods. Existing Service labels remain unchanged.
+
 This PR does not add PrometheusRule, email routing, or a dashboard. It does not include a token. The HTTP endpoint is internal Service traffic, not the external Thanos HTTPS connection.
 
 ## Evidence and prerequisites

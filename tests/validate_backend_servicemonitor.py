@@ -25,9 +25,11 @@ def validate(before, after, onprem_before, onprem_after):
     monitor = after[monitor_key]
     assert set(monitor["spec"]) == {"selector", "endpoints"}, "No cross-namespace or extra spec options"
     selector = monitor["spec"]["selector"]["matchLabels"]
+    assert monitor["spec"]["selector"]["matchExpressions"] == [{"key": "neuroplan.io/purpose", "operator": "DoesNotExist"}]
     matches = [obj for obj in after.values() if obj["kind"] == "Service"
                and obj["metadata"].get("namespace") == "neuroplan"
-               and all(obj["metadata"].get("labels", {}).get(k) == v for k, v in selector.items())]
+               and all(obj["metadata"].get("labels", {}).get(k) == v for k, v in selector.items())
+               and "neuroplan.io/purpose" not in obj["metadata"].get("labels", {})]
     assert len(matches) == 1 and matches[0]["metadata"]["name"] == "neuroplan-backend", "Select only Backend Service"
     endpoint = monitor["spec"]["endpoints"]
     assert endpoint == [{"port": "http", "path": "/actuator/prometheus", "scheme": "http",
