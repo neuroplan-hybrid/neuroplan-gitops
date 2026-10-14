@@ -1,0 +1,39 @@
+name: ROSA Backend ServiceMonitor
+
+on:
+  pull_request:
+    paths:
+      - 'overlays/rosa/40-backend-servicemonitor.yaml'
+      - 'overlays/rosa/BACKEND-METRICS.md'
+      - 'tests/validate_backend_servicemonitor.py'
+      - '.github/workflows/backend-servicemonitor.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: proposed
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: baseline
+      - uses: azure/setup-kubectl@v4
+        with:
+          version: 'v1.33.3'
+      - name: Install YAML parser
+        run: python3 -m pip install 'PyYAML>=6.0,<7'
+      - name: Render both overlays (offline)
+        run: |
+          kubectl kustomize baseline/overlays/rosa > /tmp/rosa-before.yaml
+          kubectl kustomize proposed/overlays/rosa > /tmp/rosa-after.yaml
+          kubectl kustomize baseline/overlays/onprem-dr > /tmp/onprem-before.yaml
+          kubectl kustomize proposed/overlays/onprem-dr > /tmp/onprem-after.yaml
+      - name: Check exact resource scope and endpoint
+        run: |
+          python3 proposed/tests/validate_backend_servicemonitor.py /tmp/rosa-before.yaml /tmp/rosa-after.yaml /tmp/onprem-before.yaml /tmp/onprem-after.yaml

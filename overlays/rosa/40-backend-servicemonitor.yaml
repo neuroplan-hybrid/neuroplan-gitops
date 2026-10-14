@@ -1,0 +1,21 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: neuroplan-backend
+  namespace: neuroplan
+  labels:
+    app.kubernetes.io/name: neuroplan-backend
+    app.kubernetes.io/part-of: neuroplan-login-mvp
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: neuroplan-backend
+    matchExpressions:
+      - key: neuroplan.io/purpose
+        operator: DoesNotExist
+  endpoints:
+    - port: http
+      path: /actuator/prometheus
+      scheme: http
+      interval: 30s
+      scrapeTimeout: 10s

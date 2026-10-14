@@ -8,6 +8,7 @@ resources:
   - 15-health-service.yaml
   - 20-routes.yaml
   - 25-route-tls-rbac.yaml
+  - 40-backend-servicemonitor.yaml
 
 patches:
   - path: 30-backend-config-patch.yaml
