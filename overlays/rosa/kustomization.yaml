@@ -35,6 +35,17 @@ patches:
   - path: 32-backend-rds-url-patch.yaml
   - path: 33-backend-rds-rollout.yaml
 
+  # T2 controlled deployment safety test: new Backend RS will remain NotReady.
+  # ONLY readiness probe changes; liveness/startup/routes/DB/fence are untouched.
+  # Revert this commit after observing old RS Ready=2 and new RS Ready=0.
+  - target:
+      kind: Deployment
+      name: neuroplan-backend
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/readinessProbe/httpGet/path
+        value: /actuator/health/t2-intentional-notready
+
 # #93 RDS TLS preflight — CA bundle only. No DB_URL, Secret, or Deployment changes.
 # Keep name fixed: PR #14 mounts ConfigMap "neuroplan-rds-ca" literally.
 configMapGenerator:
