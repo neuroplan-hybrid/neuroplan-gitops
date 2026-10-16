@@ -1,9 +1,9 @@
-# T6 ROSA-to-On-Prem DR: fence ROSA API writes before DB promotion.
-# Temporary, approved T6 stage only. Keep On-Prem fence until DB owner resumes DR writes.
+# T6 abort-before-promotion only: ROSA remains sole Writer; disable write fence.
+# NEVER use after On-Prem DB promotion: risks split-brain.
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: neuroplan-backend-config
 data:
   DEPLOYMENT_SITE: rosa
-  DEMO_WRITE_FENCE: "true"
+  DEMO_WRITE_FENCE: "false"
