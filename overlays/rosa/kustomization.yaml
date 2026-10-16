@@ -47,8 +47,8 @@ configMapGenerator:
 images:
   - name: harbor.nplan.local:80/neuroplan/frontend
     newName: 707191185613.dkr.ecr.ap-northeast-2.amazonaws.com/neuroplan-frontend
-    newTag: "15e0af6"
+    newTag: "d67b2bd"
 
   - name: harbor.nplan.local:80/neuroplan/backend
     newName: 707191185613.dkr.ecr.ap-northeast-2.amazonaws.com/neuroplan-backend
-    newTag: "04cb814"
+    newTag: "d67b2bd"
