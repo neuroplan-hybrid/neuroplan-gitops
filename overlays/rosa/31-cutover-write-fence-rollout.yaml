@@ -8,4 +8,4 @@ spec:
   template:
     metadata:
       annotations:
-        neuroplan.io/write-fence-rollout: "rosa-t6-fence-20261016"
+        neuroplan.io/write-fence-rollout: "rosa-t6-fence-r2-20261016"
