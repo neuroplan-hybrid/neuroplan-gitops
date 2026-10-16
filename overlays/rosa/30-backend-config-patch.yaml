@@ -1,9 +1,9 @@
-# #93 ROSA-only write resume after RDS Writer cutover and DB owner GO.
-# On-Prem Backend remains fenced in overlays/onprem-dr; Route 53 remains OFF.
+# T6 ROSA-to-On-Prem DR: fence ROSA API writes before DB promotion.
+# Temporary, approved T6 stage only. Keep On-Prem fence until DB owner resumes DR writes.
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: neuroplan-backend-config
 data:
   DEPLOYMENT_SITE: rosa
-  DEMO_WRITE_FENCE: "false"
+  DEMO_WRITE_FENCE: "true"
