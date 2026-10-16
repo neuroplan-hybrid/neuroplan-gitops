@@ -4,5 +4,6 @@ metadata:
   name: neuroplan-backend-config
 data:
   DEPLOYMENT_SITE: onprem
-  # T6 DR Writer promoted; resume app writes only after DB/Network GO.
-  DEMO_WRITE_FENCE: "false"
+  # T8 Failback: fence On-Prem writes BEFORE DB reconciliation and RDS Writer promotion.
+  # MERGE GATE: DB owner confirms the approved T8 write-stop window; never merge early.
+  DEMO_WRITE_FENCE: "true"
