@@ -4,5 +4,5 @@ metadata:
   name: neuroplan-backend-config
 data:
   DEPLOYMENT_SITE: onprem
-  # #93 Writer Cutover 준비: 승인된 동결 시점에만 적용한다.
-  DEMO_WRITE_FENCE: "true"
+  # T6 DR Writer promoted; resume app writes only after DB/Network GO.
+  DEMO_WRITE_FENCE: "false"
