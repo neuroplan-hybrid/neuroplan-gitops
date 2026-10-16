@@ -1,6 +1,5 @@
-# #93 ROSA-only write-unfence stage: Backend PodTemplate annotation is updated
-# to reload ConfigMap environment after DB owner GO and protected rollout.
-# On-Prem Backend remains fenced, Route 53 stays OFF.
+# T6 ROSA write-fence: update PodTemplate annotation to reload the ConfigMap.
+# Do not interpret ConfigMap-only Sync as an applied runtime fence.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -9,4 +8,4 @@ spec:
   template:
     metadata:
       annotations:
-        neuroplan.io/write-fence-rollout: "rosa-unfence-20261013"
+        neuroplan.io/write-fence-rollout: "rosa-t6-fence-20261016"
