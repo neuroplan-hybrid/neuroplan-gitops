@@ -1,9 +1,10 @@
-# T6 ROSA-to-On-Prem DR: fence ROSA API writes before DB promotion.
-# Temporary, approved T6 stage only. Keep On-Prem fence until DB owner resumes DR writes.
+# T8 On-Prem-to-ROSA Failback: release ROSA write fence only after DB owner GO.
+# MERGE GATE: RDS is the sole Writer, GTID/data checks pass, On-Prem is fenced.
+# Keep later patch 32 aligned so Kustomize does not restore Fence=true.
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: neuroplan-backend-config
 data:
   DEPLOYMENT_SITE: rosa
-  DEMO_WRITE_FENCE: "true"
+  DEMO_WRITE_FENCE: "false"
