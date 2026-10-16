@@ -1,5 +1,5 @@
-# T6 ROSA write-fence: update PodTemplate annotation to reload the ConfigMap.
-# Do not interpret ConfigMap-only Sync as an applied runtime fence.
+# T8 ROSA write-resume: update PodTemplate annotation to reload Fence=false.
+# Merge only after DB owner confirms RDS sole Writer and On-Prem writes fenced.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -8,4 +8,4 @@ spec:
   template:
     metadata:
       annotations:
-        neuroplan.io/write-fence-rollout: "rosa-t6-fence-r2-20261016"
+        neuroplan.io/write-fence-rollout: "rosa-t8-fence-off-20261016"
