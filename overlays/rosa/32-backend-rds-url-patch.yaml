@@ -1,4 +1,4 @@
-# T6 ROSA-to-On-Prem DR: preserve DB_URL while fencing ROSA writes.
+# T6 abort-before-promotion only: preserve DB_URL and disable fence.
 # Preconditions: RDS Writer and ir_app validated, RDS direct replication to
 # both on-prem DB replicas healthy, and DB owner GO for ROSA-only write resume.
 # On-Prem Backend stays fenced. Route 53 cutover requires separate GO.
@@ -13,5 +13,5 @@ metadata:
   name: neuroplan-backend-config
 data:
   DB_URL: "jdbc:mariadb://neuroplan-rds-operation.cp0uso08u0oq.ap-northeast-2.rds.amazonaws.com:3306/infraready?sslMode=verify-full&serverSslCert=/etc/neuroplan/rds-ca/ca-bundle.pem"
-  # Later Kustomize patch overrides 30; keep true in BOTH patches for T6.
-  DEMO_WRITE_FENCE: "true"
+  # Later Kustomize patch overrides 30; false is required in BOTH patches for abort.
+  DEMO_WRITE_FENCE: "false"
