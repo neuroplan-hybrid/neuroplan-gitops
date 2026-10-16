@@ -1,5 +1,5 @@
-# T6 On-Prem DR write resume: change PodTemplate to reload Fence=false.
-# Keep ROSA fenced and confirm MaxScale Writer routing before final GO.
+# T8 On-Prem DR write stop: roll out Backend Pods to apply Fence=true.
+# Merge only after DB owner approves the write-stop window; ROSA stays fenced.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -8,4 +8,4 @@ spec:
   template:
     metadata:
       annotations:
-        neuroplan.io/write-fence-rollout: "t6-onprem-write-resume-20261016"
+        neuroplan.io/write-fence-rollout: "t8-onprem-write-stop-20261016"
