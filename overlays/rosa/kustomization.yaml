@@ -16,7 +16,7 @@ patches:
   - path: 31-cutover-write-fence-rollout.yaml
 
   # ROSA는 AWS ECR credential provider + Worker IAM Role로 이미지를 Pull합니다.
-  # 1차 Harbor용 imagePullSecret은 base에서 제거합니다.
+  # base의 imagePullSecret은 ROSA에서 제거합니다.
   - target:
       kind: Deployment
       name: neuroplan-frontend
@@ -45,10 +45,10 @@ configMapGenerator:
       disableNameSuffixHash: true
 
 images:
-  - name: harbor.nplan.local:80/neuroplan/frontend
+  - name: 707191185613.dkr.ecr.ap-northeast-2.amazonaws.com/neuroplan-frontend
     newName: 707191185613.dkr.ecr.ap-northeast-2.amazonaws.com/neuroplan-frontend
     newTag: "d67b2bd"
 
-  - name: harbor.nplan.local:80/neuroplan/backend
+  - name: 707191185613.dkr.ecr.ap-northeast-2.amazonaws.com/neuroplan-backend
     newName: 707191185613.dkr.ecr.ap-northeast-2.amazonaws.com/neuroplan-backend
     newTag: "ca91bb8"

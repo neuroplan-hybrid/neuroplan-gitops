@@ -37,10 +37,10 @@ patches:
         value: IfNotPresent
 
 images:
-  - name: harbor.nplan.local:80/neuroplan/frontend
+  - name: 707191185613.dkr.ecr.ap-northeast-2.amazonaws.com/neuroplan-frontend
     newName: 707191185613.dkr.ecr.ap-northeast-2.amazonaws.com/neuroplan-frontend
     newTag: "d67b2bd"
 
-  - name: harbor.nplan.local:80/neuroplan/backend
+  - name: 707191185613.dkr.ecr.ap-northeast-2.amazonaws.com/neuroplan-backend
     newName: 707191185613.dkr.ecr.ap-northeast-2.amazonaws.com/neuroplan-backend
     newTag: "ca91bb8"
