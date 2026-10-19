@@ -39,7 +39,7 @@ patches:
 images:
   - name: 707191185613.dkr.ecr.ap-northeast-2.amazonaws.com/neuroplan-frontend
     newName: 707191185613.dkr.ecr.ap-northeast-2.amazonaws.com/neuroplan-frontend
-    newTag: "d67b2bd"
+    newTag: "b8c4f27"
 
   - name: 707191185613.dkr.ecr.ap-northeast-2.amazonaws.com/neuroplan-backend
     newName: 707191185613.dkr.ecr.ap-northeast-2.amazonaws.com/neuroplan-backend
