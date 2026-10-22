@@ -1,5 +1,5 @@
-# T8 On-Prem DR write stop: roll out Backend Pods to apply Fence=true.
-# Merge only after DB owner approves the write-stop window; ROSA stays fenced.
+# On-Prem-only operation: roll out Backend Pods to load Fence=false.
+# Re-enable this only while db-primary is the sole database Writer.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -8,4 +8,4 @@ spec:
   template:
     metadata:
       annotations:
-        neuroplan.io/write-fence-rollout: "t8-onprem-write-stop-20261016"
+        neuroplan.io/write-fence-rollout: "onprem-fence-off-20261022"
