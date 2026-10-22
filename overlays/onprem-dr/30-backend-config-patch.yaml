@@ -4,6 +4,6 @@ metadata:
   name: neuroplan-backend-config
 data:
   DEPLOYMENT_SITE: onprem
-  # T8 Failback: fence On-Prem writes BEFORE DB reconciliation and RDS Writer promotion.
-  # MERGE GATE: DB owner confirms the approved T8 write-stop window; never merge early.
-  DEMO_WRITE_FENCE: "true"
+  # On-Prem-only operation: ROSA and RDS are no longer in service.
+  # Verify the On-Prem db-primary remains the sole Writer before enabling writes.
+  DEMO_WRITE_FENCE: "false"
