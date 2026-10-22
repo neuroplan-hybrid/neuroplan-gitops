@@ -1,5 +1,5 @@
 # On-Prem-only operation: roll out Backend Pods to load Fence=false.
-# Re-enable this only while db-primary is the sole database Writer.
+# Apply this change only while db-primary is the sole database Writer.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
